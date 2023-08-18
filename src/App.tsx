@@ -196,7 +196,9 @@ const App = ({ dataModel = dataModels }: StaticMultiLevelFormProps) => {
 
 
   const handleAddField = (fieldName: string, formik: FormikProps<any>) => {
-    const newObjectWithInitialValues = JSON.parse(JSON.stringify(getNestedValue(formik.initialValues, fieldName)));
+    const pattern: RegExp = /\[(\d+)\]/g;
+    const fieldNameForInit = fieldName.replace(pattern, '[0]');
+    const newObjectWithInitialValues = JSON.parse(JSON.stringify(getNestedValue(formik.initialValues, fieldNameForInit)));
     const currentValues = getNestedValue(formik.values, fieldName) || [];
     const newArray = currentValues.concat(newObjectWithInitialValues[0]);
     formik.setFieldValue(fieldName, newArray);
