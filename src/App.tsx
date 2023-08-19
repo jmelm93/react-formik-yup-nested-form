@@ -9,6 +9,28 @@ import { useFormik, FormikProps } from "formik";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+const INITIAL_VALUES = {
+  tableConfig: "",
+  schemaList: [
+    {
+      jobTypes: "",
+      config: "",
+      secondLevel: [
+        {
+          name: "",
+          type: "",
+          thirdLevel: [
+            { 
+              name: "", 
+              type: "" 
+            }
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 
 const dataModels: DataModel = {
   "typeOptions":[
@@ -31,7 +53,7 @@ const getNestedValue = (obj: any, path: string) => {
   // e.g., "schemaList[0].secondLevel[0].name"
   return path
     .split(/[\[\].]+/)
-    .reduce((o, k) => (o || {})[k], obj) 
+    .reduce((o, k) => (o || INITIAL_VALUES.schemaList[0])[k], obj)
     || undefined;
 };
 
@@ -154,31 +176,11 @@ type StaticMultiLevelFormProps = {
 };
 
 const App = ({ dataModel = dataModels }: StaticMultiLevelFormProps) => {
-  const initialValues = {
-    tableConfig: "",
-    schemaList: [
-      {
-        jobTypes: "",
-        config: "",
-        secondLevel: [
-          {
-            name: "",
-            type: "",
-            thirdLevel: [
-              { 
-                name: "", 
-                type: "" 
-              }
-            ],
-          },
-        ],
-      },
-    ],
-  };
+  
 
 
   const formik = useFormik({
-    initialValues,
+    initialValues: INITIAL_VALUES,
     validationSchema,
     onSubmit: (values) => {
       // Handle form submission
